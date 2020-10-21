@@ -42,7 +42,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-
+#プロフィールテーブル
 class Profile(models.Model):
     nickName = models.CharField(max_length=20)
     userPro = models.OneToOneField(
