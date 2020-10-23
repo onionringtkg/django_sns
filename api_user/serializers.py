@@ -26,8 +26,9 @@ class ProfileSerializers(serializers.ModelSerializer):
         extra_kwargs = {'userPro': {'read_only': True}}
 
 
+#自分から自分に申請できないようにする
 class FriendRequestSerializer(serializers.ModelSerializer):
     class Meta:
-        model: FriendRequest
+        model = FriendRequest
         fields = ('id', 'askFrom', 'askTo', 'approved')
         extra_kwargs = {'askFrom': {'read_only': True}}
