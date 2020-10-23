@@ -6,7 +6,7 @@ from django.conf import settings
 # 写真のアップロードに使用する関数
 def upload_path(instance, filename):
     ext = filename.split('.')[-1]
-    return '/'.join(['image'], str(instance.userPro.id) + str(instance.nickName) + str(".") + str(ext))
+    return '/'.join(['image', str(instance.userPro.id) + str(instance.nickName) + str(".") + str(ext)])
 
 
 # 1ログイン認証をover write(BaseUserManagerに予め定義されている)

@@ -9,9 +9,10 @@ from rest_framework import status
 from rest_framework.response import Response
 from core import custompermissions
 
-#genericsとModelViewSetを使用する場合がある。
-#ModelViewSetはdefaultで全部使用できる（CRUD）
-#genericsはCreateAPIViewならcreateのみやってくれる。用途毎に分ける。
+
+# genericsとModelViewSetを使用する場合がある。
+# ModelViewSetはdefaultで全部使用できる（CRUD）
+# genericsはCreateAPIViewならcreateのみやってくれる。用途毎に分ける。
 
 # ユーザの新規作成ビュー
 class CreateUserView(generics.CreateAPIView):
@@ -20,7 +21,7 @@ class CreateUserView(generics.CreateAPIView):
 
 # 友達申請のviewset
 class FriendRequestViewSet(viewsets.ModelViewSet):
-    queryset = FriendRequest.object.all()
+    queryset = FriendRequest.objects.all()
     serializer_class = serializers.FriendRequestSerializer
     authentication_classes = (authentication.TokenAuthentication,)
     # ログイン者のみが閲覧可能にする
@@ -37,7 +38,7 @@ class FriendRequestViewSet(viewsets.ModelViewSet):
         except:
             raise ValidationError("User can have only unique request")
 
-    #削除や部分更新はできなくする（使用不可にしたいときには、以下のようにoverwriteする）
+    # 削除や部分更新はできなくする（使用不可にしたいときには、以下のようにoverwriteする）
     def destroy(self, request, *args, **kwargs):
         response = {'message': 'delete is not allowed'}
         return Response(response, status=status.HTTP_400_BAD_REQUEST)
@@ -46,24 +47,25 @@ class FriendRequestViewSet(viewsets.ModelViewSet):
         response = {'message': 'delete is not allowed'}
         return Response(response, status=status.HTTP_400_BAD_REQUEST)
 
+
 class ProfileViewSet(viewsets.ModelViewSet):
     queryset = Profile.objects.all()
     serializer_class = serializers.ProfileSerializers
     authentication_classes = (authentication.TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated, custompermissions.ProfilePermission)
 
-    #新規作成はログイン後に可能、userProには常にログインしているユーザを割り当てる。
+    # 新規作成はログイン後に可能、userProには常にログインしているユーザを割り当てる。
     def perform_create(self, serializer):
         serializer.save(userPro=self.request.user)
 
+
 #
 class MyProfileListView(generics.ListAPIView):
-
     queryset = Profile.objects.all()
     serializer_class = serializers.ProfileSerializers
     authentication_classes = (authentication.TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
-    #ログインしているユーザに基づいたprofileを取得する
+    # ログインしているユーザに基づいたprofileを取得する
     def get_queryset(self):
         return self.queryset.filter(userPro=self.request.user)

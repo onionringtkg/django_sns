@@ -3,9 +3,9 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from core.models import Profile, FriendRequest
 
-#userをオーバーライトする
-class User(serializers.ModelSerializer):
 
+# userをオーバーライトする
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
         fields = ('id', 'email', 'password')
@@ -16,14 +16,15 @@ class User(serializers.ModelSerializer):
         Token.objects.create(user=user)
         return user
 
-class ProfileSerializers(serializers.ModelSerializer):
 
+class ProfileSerializers(serializers.ModelSerializer):
     created_at = serializers.DateTimeField(format="%Y-%m-%d", read_only=True)
 
     class Meta:
         model = Profile
         fields = ('id', 'nickName', 'userPro', 'created_at', 'img')
         extra_kwargs = {'userPro': {'read_only': True}}
+
 
 class FriendRequestSerializer(serializers.ModelSerializer):
     class Meta:

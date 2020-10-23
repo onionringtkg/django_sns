@@ -34,7 +34,7 @@ class MessageViewSet(viewsets.ModelViewSet):
 #自分宛のDMを取得するViewset。genericsのListAPIViewも使用可能
 class InboxListView(viewsets.ReadOnlyModelViewSet):
 
-    queryset = Message.object.all()
+    queryset = Message.objects.all()
     serializer_class = serializers.MessageSerializer
     authentication_classes = (authentication.TokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
